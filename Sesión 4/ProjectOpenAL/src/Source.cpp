@@ -1,12 +1,12 @@
 #include "Source.h"
 #include <iostream>
 
-Source::Source() : name("unnamedSrc")
+Source::Source() : name("unnamedSrc"), pos(nullptr)
 {
 
 }
 
-Source::Source(std::string name): pos(pos), name(name)
+Source::Source(std::string name): name(name), pos(nullptr)
 {
 	alGenSources(1, &id);
 	if (alGetError() != AL_NO_ERROR)
@@ -15,6 +15,16 @@ Source::Source(std::string name): pos(pos), name(name)
 	//Default position for the source
 	ALfloat defaultPos []= { 0.0,0.0,0.0 };
 	setPosition(defaultPos);
+}
+
+Source::Source(std::string name, ALuint buffer, ALfloat* pos) : name(name)
+{
+	alGenSources(1, &id);
+	if (alGetError() != AL_NO_ERROR)
+		exit(-1);
+
+	setBuffer(buffer);
+	setPosition(pos);
 }
 
 
@@ -29,7 +39,8 @@ void Source::setBuffer(ALuint buffer)
 
 void Source::setPosition(ALfloat* newPos)
 {
-	alSourcefv(id, AL_POSITION, newPos);
+	pos = newPos;
+	alSourcefv(id, AL_POSITION, pos);
 }
 
 void Source::setLooping(bool loop)

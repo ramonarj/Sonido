@@ -7,47 +7,6 @@
 #include "Source.h"
 
 
-//class RenderBoard
-//{
-//public:
-//	RenderBoard() : sizeX(0), sizeY(0), numSources(0), sources(nullptr)
-//	{
-//	}
-//	RenderBoard(int sizeX, int sizeY) : sizeX(sizeX), sizeY(sizeY), numSources(0), sources(nullptr) {}
-//
-//	//Tamaño del tablero
-//	int getSize(int i) { if (i == 0) return sizeX; return sizeY; }
-//
-//	//Añade un source a la escena
-//	void addSource(ALfloat* source) { sources[numSources] = source; }
-//
-//	int sourceNo() { return numSources; }
-//
-//private:
-//	int sizeX;
-//	int sizeY;
-//	ALfloat **sources;
-//	int numSources;
-//};
-//
-//void render(RenderBoard* board, ALfloat* listener, ALfloat* source)
-//{
-//	for (int i = 0; i < board->getSize(0); i++)
-//	{
-//		for (int j = 0; j < board->getSize(1); j++)
-//		{
-//
-//			if (i == source[2] + board->getSize(0) / 2 && j == source[0] + board->getSize(1) /2)
-//				std::cout << source[1] << " ";
-//			else if (i == listener[2] + board->getSize(0) /2 && j == listener[0] + board->getSize(1) /2)
-//				std::cout << "L ";
-//			else
-//				std::cout << "- ";
-//		}
-//		std::cout << "\n";
-//	}
-//}
-
 int main(int argc, char* argv[]) 
 {
 
@@ -61,31 +20,15 @@ int main(int argc, char* argv[])
 	ALuint footsBuffer = alutCreateBufferFromFile("res/audio/footstepLoop.wav");
 	if (alGetError() != AL_NO_ERROR) exit(-1);
 
-	// 2. SOURCES (UNA POR CADA FUENTE)
-	Source* footStepSrc = new Source("Footstep");
-
-	//Posición
+	// 2. Creación del source con su nombre, buffer y posición
 	ALfloat posSteps[] = { 0.0, 0.0, -2.0 };
-	footStepSrc->setPosition(posSteps);
-	
-
-	// 3. LINKAR BUFFER CON SOURCE
-	footStepSrc->setBuffer(footsBuffer);
-
-
-	// 4. POSICION DEL LISTENER
-	ALfloat posListener[] = { 0.0, 0.0, 0.0 };
-
-	// REPRODUCCIÓN EN LOOP
-	footStepSrc->setLooping(true);
-
-	// LE DAMO AL PLEI
-	footStepSrc->play();
+	Source* footStepSrc = new Source("Footstep", footsBuffer, posSteps);
+	footStepSrc->setLooping(true); //Ponemos looping a true
+	footStepSrc->play(); //Reproducimos (en este caso, en bucle)
 
 
 	float incr = 1.0f;
 
-	//RenderBoard* board = nullptr; // new RenderBoard(30, 30, sources);
 
 	// Loop
 	while (true)
@@ -118,7 +61,6 @@ int main(int argc, char* argv[])
 			}
 			footStepSrc->setPosition(posSteps);
 			system("cls");
-			//render(board, posListener, posSteps);
 		}
 	}
 
