@@ -1,4 +1,5 @@
 #include "Source.h"
+
 #include <iostream>
 
 Source::Source() : name("unnamedSrc"), pos(nullptr)
@@ -30,6 +31,7 @@ Source::Source(std::string name, ALuint buffer, ALfloat* pos) : name(name)
 
 Source::~Source()
 {
+	alDeleteSources(1, &id);
 }
 
 void Source::setBuffer(ALuint buffer)
@@ -52,7 +54,35 @@ void Source::setLooping(bool loop)
 
 }
 
+void Source::setGain(ALfloat gain)
+{
+	alSourcef(id, AL_GAIN, gain);
+}
+
+void Source::setPitch(ALfloat pitch)
+{
+	alSourcef(id, AL_PITCH, pitch);
+}
+
 void Source::play()
 {
 	alSourcePlay(id);
+}
+
+void Source::pause()
+{
+	alSourcePause(id);
+}
+
+void Source::stop()
+{
+	alSourceStop(id);
+}
+
+bool Source::isPlaying()
+{
+	ALenum state;
+	alGetSourcei(id, AL_SOURCE_STATE, &state);
+
+	return (state == AL_PLAYING);
 }

@@ -1,10 +1,10 @@
 #ifndef __SOURCE_H__
 #define __SOURCE_H__
 
-#include "alut.h"
-#include "al.h"
-#include "alc.h"
+#include "al.h" //audio library -> tipos y funciones básicas
+
 #include <string>
+
 
 class Source
 {
@@ -21,23 +21,35 @@ public:
 	//SETTERS
 	//Links source to audio buffer
 	void setBuffer(ALuint buffer);
-
 	//Sets position of source
 	void setPosition(ALfloat* newPos);
-
 	//Sets position of source
 	void setLooping(bool loop);
+	//Sets source gain (0 <= gain <= 1)
+	void setGain(ALfloat buffer);
+	//Sets source pitch (0.5 <= pitch <= 2)
+	void setPitch(ALfloat pitch);
 
 
 	//GETTERS
 	//Get name of the source
 	inline std::string getName() const { return name; }
-
 	//Gets source position
 	inline ALfloat* getPosition() { return pos; }
 
+
+	//BÁSICOS
 	//Plays its sample
 	void play();
+	//Pauses the sample
+	void pause();
+	//Stops the sample
+	void stop();
+
+
+	//BOOLEANOS
+	//Indica si está sonando
+	bool isPlaying();
 
 
 private:
