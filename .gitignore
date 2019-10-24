@@ -8,7 +8,6 @@
 ## Directorios intermedios, librerías y archivos de configuración
 [Oo]bj/
 [Bb]in/*
-![Bb]in/res/
 ![Bb]in/alut.dll
 
 ## Dependencias
