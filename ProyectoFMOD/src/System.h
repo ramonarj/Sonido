@@ -1,35 +1,31 @@
 #ifndef __SYSTEM_H__
 #define __SYSTEM_H__
 
-#include <string>
 #include <iostream>
 
 #include "fmod.hpp"
 #include "fmod_errors.h"
 
-static void ERRCHECK(FMOD_RESULT result);
-
 class System
 {
 private:
-	FMOD::System* system_;
-	FMOD_RESULT result_;
+	static FMOD::System* system_;
 
 public:
-	static System* Instance();
+	static void init();
+	static void update();
+	static void release();
 
-	void update();
-
-	FMOD::System* getSystem() const { return system_; }
-
-private:
-	System();
-	~System();
-
-	static System* instance_;
+	static FMOD::System* getFmodSystem() { return system_; }
 };
 
+static void ERRCHECK(FMOD_RESULT result)
+{
+	if (result != FMOD_OK)
+	{
+		std::cout << FMOD_ErrorString(result) << std::endl;
+		exit(-1);
+	}
+}
+
 #endif // !__SYSTEM_H__
-
-
-

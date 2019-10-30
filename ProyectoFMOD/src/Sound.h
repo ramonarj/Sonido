@@ -2,18 +2,21 @@
 #define __SOUND_H__
 
 #include <string>
-#include <iostream>
 
-#include "fmod.hpp"
-#include "fmod_errors.h"
+#include "System.h"
 
-#define FMOD_SYSTEM System::Instance()->getSystem()
+#define FMOD_SYSTEM System::getFmodSystem()
 
 class Sound
 {
 private:
 	FMOD::Channel* channel_;
+	FMOD::Sound* sound_;
 	FMOD_RESULT result_;
+
+	float volume_;
+	float pitch_;
+	float pan_;
 
 public:
 	Sound(std::string filename);
@@ -23,7 +26,12 @@ public:
 	void pause();
 	void stop();
 
-	inline void setVolume(float volume) {  }
+	void setVolume(float volume);
+	void setPitch(float pitch);
+	void setPan(float pan);
+
+private:
+	void reset();
 
 };
 

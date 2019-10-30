@@ -1,33 +1,20 @@
 #include "System.h"
 
-static void ERRCHECK(FMOD_RESULT result)
+FMOD::System* System::system_ = nullptr;
+
+void System::init()
 {
-	if (result != FMOD_OK)
-	{
-		std::cout << FMOD_ErrorString(result) << std::endl;
-		exit(-1);
-	}
+	FMOD_RESULT result = FMOD::System_Create(&system_);
+	ERRCHECK(result);
+
+	result = system_->init(128, FMOD_INIT_NORMAL, 0);
+	ERRCHECK(result);
 }
 
-System::System()
+void System::release()
 {
-	result_ = FMOD::System_Create(&system_);
-	ERRCHECK(result_);
-
-	result_ = system_->init(128, FMOD_INIT_NORMAL, 0);
-	ERRCHECK(result_);
-}
-
-System::~System()
-{
-	result_ = system_->release();
-	ERRCHECK(result_);
-}
-
-System* System::Instance()
-{
-	if (!instance_) instance_ = new System();
-	return instance_;
+	FMOD_RESULT result = system_->release();
+	ERRCHECK(result);
 }
 
 void System::update()
