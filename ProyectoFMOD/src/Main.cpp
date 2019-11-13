@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include "Sound.h"
+#include "AudioSource.h"
 
 static int octave = 0;
 static std::unordered_map<char, float> keys;
@@ -28,7 +28,7 @@ int main()
 	keys[','] = 12;	// DO
 
 	System::init();
-	Sound sound(RESOURCES_PATH + "piano.ogg");
+	AudioSource sound(RESOURCES_PATH + "piano.ogg");
 
 	char c = ' ';
 	while (c != '\x1b')

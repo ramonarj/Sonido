@@ -152,12 +152,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\AuidoSource.cpp" />
+    <ClCompile Include="..\src\Listener.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
-    <ClCompile Include="..\src\Sound.cpp" />
     <ClCompile Include="..\src\System.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Sound.h" />
+    <ClInclude Include="..\src\AudioSource.h" />
+    <ClInclude Include="..\src\Listener.h" />
     <ClInclude Include="..\src\System.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
