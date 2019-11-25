@@ -4,6 +4,10 @@
 # Archivos de usuario
 *.user
 *.log
+*.pdb
+*.idb
+*.ilk
+*.obj
 
 ## Directorios intermedios, librerías y archivos de configuración
 [Oo]bj/
@@ -16,3 +20,8 @@
 
 ## .vs generado de visual
 .vs/
+
+## FMOD
+*.cache/
+*.user/
+*.tlog
