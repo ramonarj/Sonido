@@ -31,6 +31,7 @@ private:
 
 	void renderScenario(Listener* listener, Source* source);
 	bool processInput();
+	void loadWAV(std::string filename);
 
 };
 #endif // __HRTFDEMO_H__

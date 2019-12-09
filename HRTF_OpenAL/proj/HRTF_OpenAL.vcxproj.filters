@@ -21,12 +21,11 @@
     <ClCompile Include="..\src\Listener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Prueba.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\HRTFDemo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EjemploOpenAL.cpp" />
+    <ClCompile Include="..\src\Prueba.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Source.h">

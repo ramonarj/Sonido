@@ -45,17 +45,20 @@ bool HRTFDemo::init(std::string sourceFilename, int sceneWidth, int sceneHeight)
 	//Solo puede haber un contexto activo en cada momento
 
 
-	//Es lo mismo que hacer:
-	//ALCdevice *Device = alcOpenDevice((ALubyte*) "DirectSound3D");
-	//ALCcontext *Context = alcCreateContext(Device, NULL);
-	//alcMakeContextCurrent(Context);
-
 	//Inicializar OpenAL
 	alutInit(NULL, 0);
 	alutGetError();
 
+	////Abrir el dispositivo
+	//ALCdevice *Device = alcOpenDevice(NULL); //"DirectSound3D"
+	// //Crear el contexto
+	//ALCcontext *Context = alcCreateContext(Device, NULL);
+	////Establecerlo como activo
+	//alcMakeContextCurrent(Context);
+
 
 	// 1. Carga de buffers (con alut es solo una línea)
+	//loadWAV(sourceFilename);
 	sourceBuffer = alutCreateBufferFromFile(sourceFilename.c_str());
 	if (alGetError() != AL_NO_ERROR)
 		return false;
@@ -65,10 +68,12 @@ bool HRTFDemo::init(std::string sourceFilename, int sceneWidth, int sceneHeight)
 	source->setLooping(true); //Ponemos looping a true
 	source->play(); //Reproducimos (en este caso, en bucle)
 
-	//3. Creación del listener con su posición, velocidad y orientación
+	//3. Creación del listener con su posición, velocidad y orientació
 	listener = new Listener(lPos, lVel, lOri);
 
 	incr = 1.0f;
+
+	return true;
 }
 
 void HRTFDemo::free()
@@ -80,8 +85,16 @@ void HRTFDemo::free()
 	if (listener != nullptr)
 		delete listener;
 
-	//alutExit
-	alutExit();
+	//Get active context
+	ALCcontext* Context = alcGetCurrentContext();
+	//Get device for active context
+	ALCdevice* Device = alcGetContextsDevice(Context);
+	//Disable context
+	alcMakeContextCurrent(NULL);
+	//Release context(s)
+	alcDestroyContext(Context);
+	//Close device
+	alcCloseDevice(Device);
 }
 
 void HRTFDemo::renderScenario(Listener * listener, Source * source)
@@ -157,4 +170,21 @@ bool HRTFDemo::processInput()
 		source->setPosition(posSteps);
 	}
 	return true;
+}
+
+void HRTFDemo::loadWAV(std::string filename)
+{
+	ALsizei size, freq;
+	ALenum	format;
+	ALvoid	*data;
+	ALboolean loop;
+
+	// Load WaveNames[which_wave]
+	alutLoadWAVFile((ALbyte*)filename.c_str(), &format, &data, &size, &freq, &loop);
+
+	// Copy WaveNames[which_wave] data into AL Buffer which_wave
+	alBufferData(sourceBuffer, format, data, size, freq);
+
+	// Unload WaveNames[which_wave]
+	alutUnloadWAV(format, data, size, freq);
 }
