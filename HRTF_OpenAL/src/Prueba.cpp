@@ -33,7 +33,6 @@ int main(int argc, char* argv[])
 	footStepSrc->setLooping(true); //Ponemos looping a true
 	footStepSrc->play(); //Reproducimos (en este caso, en bucle)
 
-	while (true);
 	//3. Creación del listener con su posición, velocidad y orientación
 	ALfloat lPos[] = { 0,0,0 }; 
 	ALfloat lVel[] = { 0,0,0 };
