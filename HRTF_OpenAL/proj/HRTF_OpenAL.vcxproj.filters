@@ -24,12 +24,18 @@
     <ClCompile Include="..\src\Prueba.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\HRTFDemo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Source.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Listener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\HRTFDemo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

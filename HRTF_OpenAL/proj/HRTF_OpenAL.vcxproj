@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\HRTFDemo.cpp" />
     <ClCompile Include="..\src\Prueba.cpp" />
     <ClCompile Include="..\src\Listener.cpp" />
     <ClCompile Include="..\src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\HRTFDemo.h" />
     <ClInclude Include="..\src\Listener.h" />
     <ClInclude Include="..\src\Source.h" />
   </ItemGroup>
