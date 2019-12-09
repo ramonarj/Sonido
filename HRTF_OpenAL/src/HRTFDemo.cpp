@@ -195,39 +195,7 @@ void HRTFDemo::initOpenAl(bool hrtf)
 		alcGetIntegerv(device, ALC_NUM_HRTF_SPECIFIERS_SOFT, 1, &num_hrtf);
 		if (!num_hrtf)
 			printf("No HRTFs found\n");
-		else
-		{
-			ALCint attr[5];
-			ALCint index = -1;
-			ALCint i;
-			printf("Available HRTFs:\n");
-			for (i = 0; i < num_hrtf; i++)
-			{
-				const ALCchar *name = alcGetStringiSOFT(device, ALC_HRTF_SPECIFIER_SOFT, i);
-				printf("    %d: %s\n", i, name);
-				/* Check if this is the HRTF the user requested. */
-				if (hrtfname && (strcmp(name, hrtfname) == 0))
-					index = i;
-			}
-			i = 0;
-			attr[i++] = ALC_HRTF_SOFT;
-			attr[i++] = ALC_TRUE;
-			if (index == -1)
-			{
-				if (hrtfname)
-					printf("HRTF \"%s\" not found\n", hrtfname);
-				printf("Using default HRTF...\n");
-			}
-			else
-			{
-				printf("Selecting HRTF %d...\n", index);
-				attr[i++] = ALC_HRTF_ID_SOFT;
-				attr[i++] = index;
-			}
-			attr[i] = 0;
-			if (!alcResetDeviceSOFT(device, attr))
-				printf("Failed to reset device: %s\n", alcGetString(device, alcGetError(device)));
-		}
+		
 	}
 	//No queremos HRTF
 	else
