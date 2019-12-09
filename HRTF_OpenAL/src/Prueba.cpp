@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	//alcMakeContextCurrent(Context);
 
 	// 1. Carga de buffers (con alut es solo una línea)
-	ALuint footsBuffer = alutCreateBufferFromFile("res/audio/footstepLoop.wav");
+	ALuint footsBuffer = alutCreateBufferFromFile("res/footstepLoop.wav");
 	if (alGetError() != AL_NO_ERROR) exit(-1);
 
 	// 2. Creación del source con su nombre, buffer y posición
@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
 	footStepSrc->setLooping(true); //Ponemos looping a true
 	footStepSrc->play(); //Reproducimos (en este caso, en bucle)
 
+	while (true);
 	//3. Creación del listener con su posición, velocidad y orientación
 	ALfloat lPos[] = { 0,0,0 }; 
 	ALfloat lVel[] = { 0,0,0 };
