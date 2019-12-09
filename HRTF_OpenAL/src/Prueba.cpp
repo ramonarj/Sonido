@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
 {
 	//Creamos la demo y la inicializamos
 	HRTFDemo hrtfDemo = HRTFDemo();
-	if(!hrtfDemo.init("res/footstepLoop.wav", 20, 20))
+	if(!hrtfDemo.init("res/audio/footstepLoop.wav", 20, 20, "res/hrtf/IRC_1005.def"))
 		exit(-1);
 
 	//Actualizamos

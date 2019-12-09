@@ -2,6 +2,7 @@
 #define __HRTFDEMO_H__
 
 #include "al.h" //audio library -> tipos y funciones básicas
+#include "alc.h"
 #include <string>
 
 class Listener;
@@ -17,7 +18,7 @@ public:
 	~HRTFDemo();
 
 	//Inicializa recursos
-	bool init(std::string sourceFilename, int sceneWidth, int sceneHeight);
+	bool init(std::string sourceFilename, int sceneWidth, int sceneHeight, const char *hrtfname);
 
 	//Actualiza la lógica
 	bool update();
@@ -38,10 +39,15 @@ private:
 	float incr;
 	int sceneWidth;
 	int sceneHeight;
+	const char *hrtfname;
+	ALCint num_hrtf;
 
 	//Métodos auxiliares
 	void renderScenario(Listener* listener, Source* source);
 	bool processInput();
 	void loadWAV(std::string filename);
+
+	void initOpenAl(bool hrtf);
+	void checkHRTFstate();
 };
 #endif 

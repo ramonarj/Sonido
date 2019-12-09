@@ -7,6 +7,7 @@
 
 #include "alc.h" // audio library context -> no la usamos de momento
 #include "alut.h" //audio library utility toolkit -> inicialización y cosas más tochas
+#include "alext.h" //Extensión
 
 #include "Utils.h"
 
@@ -14,9 +15,12 @@
 
 ALfloat lPos[] = { 0,0,0 };
 ALfloat lVel[] = { 0,0,0 };
-ALfloat lOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 }; //vectores "At" y "Up" (mira hacia el eje Z negativo)
+ALfloat lOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 }; //vectores "At" y "Up" (mira hacia el eje Z negativo
 
 ALfloat sourcePos[] = { 0.0, 0.0, -2.0 };
+
+static LPALCGETSTRINGISOFT alcGetStringiSOFT;
+static LPALCRESETDEVICESOFT alcResetDeviceSOFT;
 
 HRTFDemo::HRTFDemo() :  listener(nullptr), source(nullptr), incr(0), sceneWidth(0), sceneHeight(0)
 {
@@ -30,36 +34,34 @@ HRTFDemo::~HRTFDemo()
 bool HRTFDemo::update()
 {
 	//1. Renderizar el escenario
-	renderScenario(listener, source);
+	//renderScenario(listener, source);
 
 	//return true;
 	//2. Procesar el input
 	return processInput();
 }
 
-bool HRTFDemo::init(std::string sourceFilename, int sceneWidth, int sceneHeight)
+bool HRTFDemo::init(std::string sourceFilename, int sceneWidth, int sceneHeight, const char *hrtfname)
 {
 	this->sceneWidth = sceneWidth;
 	this->sceneHeight = sceneHeight;
+	this->hrtfname = hrtfname;
 
-	//Inicialización: esta función crea el contexto en el que vamos a trabajar (que consta de listener y fuentes)
-	//y selecciona el dispositivo según considere (la tarjeta de sonido)
-	//Solo puede haber un contexto activo en cada momento
+	// 1. Inicializamos OpenAL
+	initOpenAl(true);
 
-	//Inicializar OpenAL
-	Device = alcOpenDevice(NULL); //Dispositivo
-	Context = alcCreateContext(Device, NULL); //Contexto
-	alcMakeContextCurrent(Context);
+	// 2. Comprobamos que el HRTF se ha inicializado bien
+	checkHRTFstate();
 
-	// 1. Carga de buffers (con alut es solo una línea)
+	// 3. Cargamos los WAVES
 	loadWAV(sourceFilename);
 
-	// 2. Creación del source con su nombre, buffer y posición
+	// 4. Creación del Source con su nombre, buffer y posición
 	source = new Source("Footstep", sourceBuffer, sourcePos);
 	source->setLooping(true); //Ponemos looping a true
 	source->play(); //Reproducimos (en este caso, en bucle)
 
-	//3. Creación del listener con su posición, velocidad y orientación
+	//5. Creación del Listener con su posición, velocidad y orientación
 	listener = new Listener(lPos, lVel, lOri);
 
 	incr = 1.0f;
@@ -161,6 +163,94 @@ bool HRTFDemo::processInput()
 		source->setPosition(posSteps);
 	}
 	return true;
+}
+
+void HRTFDemo::initOpenAl(bool hrtf)
+{
+	//Inicialización: esta función crea el contexto en el que vamos a trabajar (que consta de listener y fuentes)
+	//y selecciona el dispositivo según considere (la tarjeta de sonido)
+	//Solo puede haber un contexto activo en cada momento
+
+	//Abrimos el dispositivo (por defecto)
+	//Device = alcOpenDevice("DirectSound3D");
+	Device = alcOpenDevice(NULL); //Dispositivo
+
+	//Creamos el contexto (dependiendo de si queremos HRTF o no)
+	if (hrtf)
+	{
+		//Comprobamos que el HRTF es compatible con el dispositivo en el que estamos
+		if (!alcIsExtensionPresent(Device, "ALC_SOFT_HRTF"))
+			fprintf(stderr, "Error: ALC_SOFT_HRTF not supported\n");
+
+		//Creamos el contexto diciendo que queremos HRTF
+		ALCint attrs[] = { ALC_HRTF_SOFT, ALC_TRUE,  //Para que se use el HRTF
+			ALC_HRTF_ID_SOFT, 0, //Índice del HRTF que queremos usar
+			0 }; //Fin de la lista
+		Context = alcCreateContext(Device, attrs);
+
+		alcGetIntegerv(Device, ALC_NUM_HRTF_SPECIFIERS_SOFT, 1, &num_hrtf);
+		if (!num_hrtf)
+			printf("No HRTFs found\n");
+		else
+		{
+			ALCint attr[5];
+			ALCint index = -1;
+			ALCint i;
+
+			printf("Available HRTFs:\n");
+			for (i = 0; i < num_hrtf; i++)
+			{
+				const ALCchar *name = alcGetStringiSOFT(Device, ALC_HRTF_SPECIFIER_SOFT, i);
+				printf("    %d: %s\n", i, name);
+
+				/* Check if this is the HRTF the user requested. */
+				if (hrtfname && (strcmp(name, hrtfname) == 0))
+					index = i;
+			}
+
+			i = 0;
+			attr[i++] = ALC_HRTF_SOFT;
+			attr[i++] = ALC_TRUE;
+			if (index == -1)
+			{
+				if (hrtfname)
+					printf("HRTF \"%s\" not found\n", hrtfname);
+				printf("Using default HRTF...\n");
+			}
+			else
+			{
+				printf("Selecting HRTF %d...\n", index);
+				attr[i++] = ALC_HRTF_ID_SOFT;
+				attr[i++] = index;
+			}
+			attr[i] = 0;
+
+			if (!alcResetDeviceSOFT(Device, attr))
+				printf("Failed to reset device: %s\n", alcGetString(Device, alcGetError(Device)));
+		}
+	}
+	//No queremos HRTF
+	else
+		Context = alcCreateContext(Device, NULL);
+
+	//Ponemos el contexto como el activo
+	alcMakeContextCurrent(Context);
+}
+
+
+void HRTFDemo::checkHRTFstate()
+{
+	ALCint hrtf_state;
+	ALCint num_hrtf;
+	alcGetIntegerv(Device, ALC_HRTF_SOFT, 1, &hrtf_state);
+
+	if (!hrtf_state)
+		printf("HRTF not enabled!\n");
+	else
+	{
+		const ALchar *name = alcGetString(Device, ALC_HRTF_SPECIFIER_SOFT);
+		printf("HRTF enabled, using %s\n", name);
+	}
 }
 
 void HRTFDemo::loadWAV(std::string filename)
