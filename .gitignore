@@ -11,8 +11,8 @@
 
 ## Directorios intermedios, librerías y archivos de configuración
 [Oo]bj/
-[Bb]in/*
-![Bb]in/alut.dll
+*/[Bb]in/
+!*/[Bb]in/alut.dll
 
 ## Dependencias
 #Cuando las tengamos

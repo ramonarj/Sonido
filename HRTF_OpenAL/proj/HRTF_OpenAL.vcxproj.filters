@@ -18,10 +18,10 @@
     <ClCompile Include="..\src\Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Ejercicio3.cpp">
+    <ClCompile Include="..\src\Listener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Listener.cpp">
+    <ClCompile Include="..\src\Prueba.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
