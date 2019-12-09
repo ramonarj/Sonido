@@ -1,6 +1,7 @@
 #include "Source.h"
 
 #include <iostream>
+#include "Utils.h"
 
 Source::Source() : name("unnamedSrc"), pos(nullptr)
 {
@@ -9,9 +10,11 @@ Source::Source() : name("unnamedSrc"), pos(nullptr)
 
 Source::Source(std::string name): name(name), pos(nullptr)
 {
+	int error;
 	alGenSources(1, &id);
-	if (alGetError() != AL_NO_ERROR)
-		exit(-1);
+	if ((error = alGetError()) != AL_NO_ERROR)
+		DisplayALError("genSources 1 : ", error);
+		
 
 	//Default position for the source
 	ALfloat defaultPos []= { 0.0,0.0,0.0 };

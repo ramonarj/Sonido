@@ -6,6 +6,8 @@
 
 class Listener;
 class Source;
+struct ALCcontext;
+struct ALCdevice;
 
 class HRTFDemo
 {
@@ -14,24 +16,32 @@ public:
 	HRTFDemo();
 	~HRTFDemo();
 
-	bool update();
-
+	//Inicializa recursos
 	bool init(std::string sourceFilename, int sceneWidth, int sceneHeight);
 
+	//Actualiza la lógica
+	bool update();
+
+	//Libera recursos
 	void free();
 
-
 private:
-	Listener * listener;
-	Source* source;
-	float incr;
+	//Inicialización de OpenAL
+	ALCcontext * Context;
+	ALCdevice *Device;
+
+	//Objetos de la demo
 	ALuint sourceBuffer;
+	Source* source;
+	Listener * listener;
+
+	float incr;
 	int sceneWidth;
 	int sceneHeight;
 
+	//Métodos auxiliares
 	void renderScenario(Listener* listener, Source* source);
 	bool processInput();
 	void loadWAV(std::string filename);
-
 };
-#endif // __HRTFDEMO_H__
+#endif 

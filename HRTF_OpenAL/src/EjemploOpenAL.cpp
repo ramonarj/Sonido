@@ -41,7 +41,7 @@
 //for loading files
 //*/
 //
-//ALvoid DisplayALError(ALbyte *szText, ALint errorcode)
+//ALvoid DisplayALError(ALubyte *szText, ALint errorcode)
 //{
 //	printf("%s%s", szText, alGetString(errorcode));
 //}
@@ -99,6 +99,14 @@
 //
 //		// Load WaveNames[which_wave]
 //		alutLoadWAVFile((ALbyte*)WaveNames[which_wave], &format, &data, &size, &freq, &loop);
+//		// an example of error checking
+//		if ((error = alGetError()) != AL_NO_ERROR)
+//		{
+//			DisplayALError((ALubyte*)"alutLoadWAVFile : ", error);
+//			// Delete Buffers
+//			alDeleteBuffers(NUM_BUFFERS, g_Buffers);
+//			exit(-1);
+//		}
 //
 //		// Copy WaveNames[which_wave] data into AL Buffer which_wave
 //		alBufferData(g_Buffers[which_wave], format, data, size, freq);
@@ -792,6 +800,11 @@
 //	ALfloat source1Pos[] = { 10.0, 0.0, -10.0 };	// Front and to the right of the listener
 //
 //	alGenSources(2, source);
+//	if ((error = alGetError()) != AL_NO_ERROR)
+//	{
+//		DisplayALError((ALubyte*)"alGenSources 2 : ", error);
+//		return;
+//	}
 //
 //	alSourcefv(source[0], AL_POSITION, source0Pos);
 //	alSourcei(source[0], AL_BUFFER, g_Buffers[1]);
