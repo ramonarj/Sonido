@@ -1,6 +1,6 @@
 #include "Utils.h"
 
-#include "al.h" 
+#include "AL/al.h" 
 #include <stdio.h>
 
 void DisplayALError(const char * szText, int errorcode)

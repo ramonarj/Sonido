@@ -1,8 +1,8 @@
 #ifndef __HRTFDEMO_H__
 #define __HRTFDEMO_H__
 
-#include "al.h" //audio library -> tipos y funciones básicas
-#include "alc.h"
+#include "AL/al.h" //audio library -> tipos y funciones básicas
+#include "AL/alc.h"
 #include <string>
 
 class Listener;
@@ -27,20 +27,15 @@ public:
 	void free();
 
 private:
-	//Inicialización de OpenAL
-	ALCcontext * Context;
-	ALCdevice *Device;
-
 	//Objetos de la demo
-	ALuint sourceBuffer;
 	Source* source;
 	Listener * listener;
+	ALuint sourceBuffer;
 
 	float incr;
 	int sceneWidth;
 	int sceneHeight;
 	const char *hrtfname;
-	ALCint num_hrtf;
 
 	//Métodos auxiliares
 	void renderScenario(Listener* listener, Source* source);

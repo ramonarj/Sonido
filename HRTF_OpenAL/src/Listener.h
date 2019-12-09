@@ -1,7 +1,7 @@
 #ifndef __LISTENER_H__
 #define __LISTENER_H__
 
-#include "al.h" //audio library -> tipos y funciones básicas
+#include "AL/al.h" //audio library -> tipos y funciones básicas
 
 #include <string>
 
