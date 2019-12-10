@@ -1,7 +1,10 @@
 #include "Source.h"
 
 #include <iostream>
+
 #include "Utils.h"
+
+#include "AL/al.h" //audio library -> tipos y funciones básicas
 
 Source::Source() : name("unnamedSrc"), pos(nullptr)
 {

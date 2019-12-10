@@ -1,10 +1,10 @@
 #ifndef __SOURCE_H__
 #define __SOURCE_H__
 
-#include "AL/al.h" //audio library -> tipos y funciones básicas
-
 #include <string>
 
+typedef unsigned int ALuint;
+typedef float ALfloat;
 
 class Source
 {

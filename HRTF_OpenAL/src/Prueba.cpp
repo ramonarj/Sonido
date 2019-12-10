@@ -1,6 +1,5 @@
 #include "HRTFDemo.h"
 
-
 //LOS WAV TIENEN QUE ESTAR EN FORMATO MONO!!
 int main(int argc, char* argv[]) 
 {

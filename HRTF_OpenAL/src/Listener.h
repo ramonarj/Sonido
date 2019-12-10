@@ -1,10 +1,9 @@
 #ifndef __LISTENER_H__
 #define __LISTENER_H__
 
-#include "AL/al.h" //audio library -> tipos y funciones básicas
-
-#include <string>
-
+//Predeclaraciones
+typedef unsigned int ALuint;
+typedef float ALfloat;
 
 class Listener
 {

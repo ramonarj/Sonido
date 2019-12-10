@@ -1,14 +1,13 @@
 #ifndef __HRTFDEMO_H__
 #define __HRTFDEMO_H__
 
-#include "AL/al.h" //audio library -> tipos y funciones básicas
-#include "AL/alc.h"
 #include <string>
 
 class Listener;
 class Source;
 struct ALCcontext;
 struct ALCdevice;
+typedef unsigned int ALuint;
 
 class HRTFDemo
 {
@@ -43,6 +42,5 @@ private:
 	void loadWAV(std::string filename);
 
 	void initOpenAl(bool hrtf);
-	void checkHRTFstate();
 };
 #endif 

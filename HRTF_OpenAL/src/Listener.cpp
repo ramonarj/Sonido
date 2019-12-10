@@ -1,6 +1,9 @@
 #include "Listener.h"
 
 #include <iostream>
+#include <string>
+
+#include "AL/al.h" //audio library -> tipos y funciones básicas
 
 Listener::Listener() :  pos(nullptr), vel(nullptr), ori(nullptr)
 {
