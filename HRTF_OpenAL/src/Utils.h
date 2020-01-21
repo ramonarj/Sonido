@@ -1,3 +1,6 @@
-#pragma once
+#ifndef __UTILS_H__
+#define __UTILS_H__
 
-void DisplayALError(const char *szText, int errorcode);
+void DisplayALError();
+
+#endif // !__UTILS_H__

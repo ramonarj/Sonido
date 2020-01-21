@@ -1,42 +1,40 @@
 #ifndef __SOURCE_H__
 #define __SOURCE_H__
 
-#include <string>
-
-typedef unsigned int ALuint;
-typedef float ALfloat;
-
 class Source
 {
+private:
+	const char* name;
+	unsigned int id;
+	float* pos;
+
 public:
 	//Constructora por defecto
 	Source();
 	//Constructora solo con el nombre
-	Source(std::string name);
-	//Constructora guay
-	Source(std::string name, ALuint buffer, ALfloat* pos);
+	Source(const char* name);
+	//Constructora con parámetros
+	Source(const char* name, unsigned int buffer, float* pos);
+	// Destructora
 	~Source();
-
 
 	//SETTERS
 	//Links source to audio buffer
-	void setBuffer(ALuint buffer);
+	void setBuffer(unsigned int buffer);
 	//Sets position of source
-	void setPosition(ALfloat* newPos);
+	void setPosition(float* newPos);
 	//Sets position of source
 	void setLooping(bool loop);
 	//Sets source gain (0 <= gain <= 1)
-	void setGain(ALfloat buffer);
+	void setGain(float buffer);
 	//Sets source pitch (0.5 <= pitch <= 2)
-	void setPitch(ALfloat pitch);
-
+	void setPitch(float pitch);
 
 	//GETTERS
 	//Get name of the source
-	inline std::string getName() const { return name; }
+	inline const char* getName() const { return name; }
 	//Gets source position
-	inline ALfloat* getPosition() { return pos; }
-
+	inline float* getPosition() { return pos; }
 
 	//BÁSICOS
 	//Plays its sample
@@ -46,15 +44,9 @@ public:
 	//Stops the sample
 	void stop();
 
-
 	//BOOLEANOS
 	//Indica si está sonando
 	bool isPlaying();
-
-
-private:
-	ALfloat* pos;
-	std::string name;
-	ALuint id;
 };
+
 #endif // __SOURCE_H__

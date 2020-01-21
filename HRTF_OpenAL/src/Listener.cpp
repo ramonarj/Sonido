@@ -1,41 +1,50 @@
-#include "Listener.h"
-
 #include <iostream>
-#include <string>
 
-#include "AL/al.h" //audio library -> tipos y funciones básicas
+#include "Listener.h"
+#include "Utils.h"
+#include "AL/al.h"
 
-Listener::Listener() :  pos(nullptr), vel(nullptr), ori(nullptr)
+int Listener::count = 0;
+
+Listener::Listener() :
+	pos(nullptr),
+	vel(nullptr),
+	ori(nullptr),
+	id(count)
 {
-
+	count++;
 }
 
-Listener::Listener(ALfloat* pos, ALfloat* vel, ALfloat* ori): pos(pos), vel(vel), ori(ori)
+Listener::Listener(float* pos, float* vel, float* ori) :
+	id(count)
 {
-	alListenerfv(AL_POSITION, pos);
-	alListenerfv(AL_VELOCITY, vel);
-	alListenerfv(AL_ORIENTATION, ori);
+	setPosition(pos);
+	setVelocity(vel);
+	setOrientation(ori);
+	count++;
 }
-
-
 
 Listener::~Listener()
 {
+	count--;
 }
 
-void Listener::setPosition(ALfloat* newPos)
+void Listener::setPosition(float* newPos)
 {
 	pos = newPos;
 	alListenerfv(AL_POSITION, pos);
+	DisplayALError();
 }
 
-void Listener::setVelocity(ALfloat* newVel)
+void Listener::setVelocity(float* newVel)
 {
 	vel = newVel;
 	alListenerfv(AL_VELOCITY, pos);
+	DisplayALError();
 }
-void Listener::setOrientation(ALfloat* newOri)
+void Listener::setOrientation(float* newOri)
 {
 	ori = newOri;
 	alListenerfv(AL_ORIENTATION, ori);
+	DisplayALError();
 }

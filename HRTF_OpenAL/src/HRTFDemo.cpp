@@ -1,10 +1,4 @@
-#include "HRTFDemo.h"
-
-#include "Listener.h"
-#include "Source.h"
-#include "Utils.h"
-
-#include <conio.h> //para _getch
+#include <conio.h>
 #include <iostream>
 
 #include "AL/al.h" // audio library -> tipos y funciones básicas de openAL
@@ -12,13 +6,18 @@
 #include "AL/alut.h" // audio library utility toolkit -> inicialización más cómoda y más utilidades 
 #include "AL/alext.h" // audio library extension -> extensión usada para las 2 funciones estáticas a continuación:
 
+#include "HRTFDemo.h"
+#include "Listener.h"
+#include "Source.h"
+#include "Utils.h"
+
 static LPALCGETSTRINGISOFT alcGetStringiSOFT;
 static LPALCRESETDEVICESOFT alcResetDeviceSOFT;
 
 //Macros
-#define ESC '\033'
-#define INCR 1.0f
-#define HRTF_ID 0 //ID de la hrtf que usamos (0 = default, 2 = default#2, 4 = Built-in). Todas de 44100Hz
+const char ESC = '\033';
+const int INCR = 1.0f;
+const int HRTF_ID = 0; //ID de la hrtf que usamos (0 = default, 2 = default#2, 4 = Built-in). Todas de 44100Hz
 
 //Atributos del listener y source (son globales porque si no desaparecen al salir de contexto)
 ALfloat lPos[] = { 0,0,0 };
@@ -27,16 +26,21 @@ ALfloat lOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 }; //vectores "At" y "Up" (mir
 ALfloat sourcePos[] = { 0.0, 0.0, -2.0 };
 
 
-HRTFDemo::HRTFDemo() :  listener(nullptr), source(nullptr), incr(0), sceneWidth(0), sceneHeight(0)
+HRTFDemo::HRTFDemo() :
+	listener(nullptr), 
+	source(nullptr), 
+	sceneWidth(0), 
+	sceneHeight(0),
+	hrtfname(""),
+	sourceBuffer(0)
 {
-
 }
 
 HRTFDemo::~HRTFDemo()
 {
 }
 
-bool HRTFDemo::init(std::string sourceFilename, int sceneWidth, int sceneHeight, const char* hrtfname)
+bool HRTFDemo::init(const char* sourceFilename, int sceneWidth, int sceneHeight, const char* hrtfname)
 {
 	this->sceneWidth = sceneWidth;
 	this->sceneHeight = sceneHeight;
@@ -45,7 +49,7 @@ bool HRTFDemo::init(std::string sourceFilename, int sceneWidth, int sceneHeight,
 	// 1. Inicializamos OpenAL
 	initOpenAl(true);
 
-	// 2. Cargamos los WAVES
+	// 2. Cargamos los WAV
 	loadWAV(sourceFilename);
 
 	// 3. Creación del Source con su nombre, buffer y posición
@@ -137,7 +141,6 @@ bool HRTFDemo::update()
 	//1. Renderizar el escenario
 	renderScenario(listener, source);
 
-	//return true;
 	//2. Procesar el input
 	return processInput();
 }
@@ -221,7 +224,7 @@ void HRTFDemo::initOpenAl(bool hrtf)
 	}
 }
 
-void HRTFDemo::loadWAV(std::string filename)
+void HRTFDemo::loadWAV(const char* filename)
 {
 	//Genera los buffers necesarios
 	alGenBuffers(1, &sourceBuffer);
@@ -233,16 +236,18 @@ void HRTFDemo::loadWAV(std::string filename)
 	ALboolean loop;
 
 	//Carga los archivos WAVE
-	alutLoadWAVFile((ALbyte*)filename.c_str(), &format, &data, &size, &freq, &loop);
+	alutLoadWAVFile((ALbyte*)filename, &format, &data, &size, &freq, &loop);
 	if ((error = alGetError()) != AL_NO_ERROR) //Error al cargar el archivo
 	{
-		DisplayALError("alutLoadWAVFile : ", error);
 		alDeleteBuffers(1, &sourceBuffer);
+		DisplayALError();
 	}
 
 	//Copia la información de los WAVE al Buffer de datos
 	alBufferData(sourceBuffer, format, data, size, freq);
+	DisplayALError();
 
 	//Descarga los WAVES
 	alutUnloadWAV(format, data, size, freq);
+	DisplayALError();
 }

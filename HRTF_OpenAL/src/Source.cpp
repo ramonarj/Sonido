@@ -1,34 +1,32 @@
-#include "Source.h"
-
 #include <iostream>
 
+#include "Source.h"
 #include "Utils.h"
+#include "AL/al.h"
 
-#include "AL/al.h" //audio library -> tipos y funciones básicas
-
-Source::Source() : name("unnamedSrc"), pos(nullptr)
+Source::Source() :
+	name("unnamedSrc"),
+	id(0),
+	pos(nullptr)
 {
-
 }
 
-Source::Source(std::string name): name(name), pos(nullptr)
+Source::Source(const char* name) :
+	name(name),
+	pos(nullptr)
 {
-	int error;
 	alGenSources(1, &id);
-	if ((error = alGetError()) != AL_NO_ERROR)
-		DisplayALError("genSources 1 : ", error);
-		
+	DisplayALError();
 
-	//Default position for the source
-	ALfloat defaultPos []= { 0.0,0.0,0.0 };
+	ALfloat defaultPos[] = { 0.0f, 0.0f, 0.0f };
 	setPosition(defaultPos);
 }
 
-Source::Source(std::string name, ALuint buffer, ALfloat* pos) : name(name)
+Source::Source(const char* name, unsigned int buffer, float* pos) :
+	name(name)
 {
 	alGenSources(1, &id);
-	if (alGetError() != AL_NO_ERROR)
-		exit(-1);
+	DisplayALError();
 
 	setBuffer(buffer);
 	setPosition(pos);
@@ -38,57 +36,71 @@ Source::Source(std::string name, ALuint buffer, ALfloat* pos) : name(name)
 Source::~Source()
 {
 	alDeleteSources(1, &id);
+	DisplayALError();
 }
 
-void Source::setBuffer(ALuint buffer)
+void Source::setBuffer(unsigned int buffer)
 {
 	alSourcei(id, AL_BUFFER, buffer);
+	DisplayALError();
 }
 
-void Source::setPosition(ALfloat* newPos)
+void Source::setPosition(float* newPos)
 {
 	pos = newPos;
 	alSourcefv(id, AL_POSITION, pos);
+	DisplayALError();
 }
 
 void Source::setLooping(bool loop)
 {
-	if(loop)
+	if (loop)
+	{
 		alSourcei(id, AL_LOOPING, AL_TRUE);
+		DisplayALError();
+	}
 	else
+	{
 		alSourcei(id, AL_LOOPING, AL_FALSE);
-
+		DisplayALError();
+	}
 }
 
-void Source::setGain(ALfloat gain)
+void Source::setGain(float gain)
 {
 	alSourcef(id, AL_GAIN, gain);
+	DisplayALError();
 }
 
-void Source::setPitch(ALfloat pitch)
+void Source::setPitch(float pitch)
 {
 	alSourcef(id, AL_PITCH, pitch);
+	DisplayALError();
 }
 
 void Source::play()
 {
 	alSourcePlay(id);
+	DisplayALError();
 }
 
 void Source::pause()
 {
 	alSourcePause(id);
+	DisplayALError();
 }
 
 void Source::stop()
 {
 	alSourceStop(id);
+	DisplayALError();
 }
 
 bool Source::isPlaying()
 {
 	ALenum state;
 	alGetSourcei(id, AL_SOURCE_STATE, &state);
+	DisplayALError();
 
 	return (state == AL_PLAYING);
 }

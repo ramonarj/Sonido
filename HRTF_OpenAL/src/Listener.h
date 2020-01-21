@@ -1,44 +1,39 @@
 #ifndef __LISTENER_H__
 #define __LISTENER_H__
 
-//Predeclaraciones
-typedef unsigned int ALuint;
-typedef float ALfloat;
-
 class Listener
 {
+private:
+	float* pos;
+	float* vel;
+	float* ori;
+	int id;
+
+	static int count;
+
 public:
 	//Constructora por defecto
 	Listener();
-	//Constructora guay
-	Listener(ALfloat* pos, ALfloat* vel, ALfloat* ori);
+	//Constructora con parámetros
+	Listener(float* pos, float* vel, float* ori);
+	//Destructora
 	~Listener();
 
-
 	//SETTERS
-
 	//Sets listener's position 
-	void setPosition(ALfloat* newPos);
+	void setPosition(float* newPos);
 	//Sets listener's velocity 
-	void setVelocity(ALfloat* newVel);
+	void setVelocity(float* newVel);
 	//Sets listener's orientation 
-	void setOrientation(ALfloat* newOri);
-
-
+	void setOrientation(float* newOri);
 
 	//GETTERS
 	//Gets listener's position
-	inline ALfloat* getPosition() { return pos; }
+	inline float* getPosition() { return pos; }
 	//Gets listener's velocity
-	inline ALfloat* getVelocity() { return vel; }
+	inline float* getVelocity() { return vel; }
 	//Gets listener's orientation
-	inline ALfloat* getOrientation() { return ori; }
-
-
-private:
-	ALfloat* pos;
-	ALfloat* vel;
-	ALfloat* ori;
-	ALuint id;
+	inline float* getOrientation() { return ori; }
 };
+
 #endif // __LISTENER_H__
