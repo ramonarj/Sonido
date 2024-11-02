@@ -1,5 +1,4 @@
 ## Gitignore para nuestro proyecto de Sonido.
-## Similar al de https://github.com/xBlacKnife/Proyecto-III/blob/master/.gitignore
 
 # Archivos de usuario
 *.user
